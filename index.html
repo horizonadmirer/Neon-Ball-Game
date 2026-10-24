@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NEON VELVET 🪩 Empty Discotheque & Rolling Ball</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <!-- 3D WebGL Canvas Container -->
+    <div id="canvas-container"></div>
+
+    <!-- Visual Crazy Effects Overlays -->
+    <div id="screen-fx-overlay"></div>
+    <div id="kaleido-overlay"></div>
+
+    <!-- Cyber Disco HUD Layer -->
+    <div class="hud-layer">
+        <!-- Top Bar: Title & Crazy Effects Deck -->
+        <header class="top-bar">
+            <div class="brand-badge hud-interactive">
+                <span style="font-size: 1.4rem;">🪩</span>
+                <div>
+                    <h1>NEON VELVET</h1>
+                    <div class="subtitle">Empty Discotheque Sim</div>
+                </div>
+            </div>
+
+            <!-- Crazy Visual Effects Hotbar -->
+            <div class="effects-deck hud-interactive">
+                <button class="fx-btn" data-action="strobe" title="Blinding Multi-Color Strobe Lights">
+                    ⚡ STROBE <kbd>F</kbd>
+                </button>
+                <button class="fx-btn" data-action="lasers" title="16-Beam Fog Piercing Laser Storm">
+                    ✨ LASERS <kbd>L</kbd>
+                </button>
+                <button class="fx-btn" data-action="zeroG" title="Invert Gravity & Float to Disco Ball">
+                    🛸 ZERO-G <kbd>G</kbd>
+                </button>
+                <button class="fx-btn" data-action="acidTrip" title="Psychedelic 360-degree HSV Color Morph">
+                    🌀 ACID TRIP <kbd>C</kbd>
+                </button>
+                <button class="fx-btn" data-action="supernova" title="Hyper-Spin Disco Ball Ray Blast">
+                    🪩 SUPERNOVA <kbd>B</kbd>
+                </button>
+                <button class="fx-btn" data-action="kaleido" title="Hyperspace Kaleido-Vision Warp">
+                    👁️ KALEIDO <kbd>K</kbd>
+                </button>
+                <button class="fx-btn" data-action="slam" title="Massive Sub-Bass Drop & Radial Shockwave">
+                    💥 BASS SLAM <kbd>X</kbd>
+                </button>
+            </div>
+
+            <!-- Procedural Disco Synthesizer & Audio VU -->
+            <div class="audio-card hud-interactive">
+                <div class="audio-info">
+                    <span class="audio-title">DISCO SOUNDSYSTEM</span>
+                    <span class="track-name" id="track-name">Nu-Disco Inferno</span>
+                </div>
+                <canvas id="vu-canvas" width="60" height="22"></canvas>
+                <button class="action-btn" data-action="track" title="Change Disco / Techno Track" style="padding: 6px 10px; font-size: 0.72rem;">
+                    ⏭️ NEXT
+                </button>
+                <button class="action-btn" data-action="music" title="Toggle Procedural Music" style="padding: 6px 12px; font-size: 0.72rem;">
+                    🔊 MUSIC ON
+                </button>
+            </div>
+        </header>
+
+        <!-- Bottom Controls Bar -->
+        <footer class="bottom-bar">
+            <!-- Virtual Touch Joystick for touch/mobile or mouse drag -->
+            <div class="touch-zone-container hud-interactive">
+                <div id="touch-zone" title="Drag to Roll Ball">
+                    <div id="joystick-knob"></div>
+                </div>
+            </div>
+
+            <!-- Central Speedometer & Skin Pill -->
+            <div class="telemetry-cluster hud-interactive">
+                <div class="speed-gauge" id="speed-display">
+                    0 <span style="font-size: 0.6em; color: #00f0ff;">KM/H</span>
+                </div>
+                <div class="skin-selector-pill">
+                    <span>BALL SKIN:</span>
+                    <span id="current-skin-label">Mirror Disco Ball</span>
+                </div>
+            </div>
+
+            <!-- Action Controls Group -->
+            <div class="action-cluster hud-interactive">
+                <button class="action-btn boost-btn" data-action="boost" title="Nitro Turbo Speed & Blazing Light Trail">
+                    🔥 TURBO <kbd style="color:#ff007f;">SHIFT</kbd>
+                </button>
+                <button class="action-btn" data-action="jump" title="Jump into Air & Shockwave Slam">
+                    🚀 JUMP <kbd style="color:#00f0ff;">SPACE</kbd>
+                </button>
+                <button class="action-btn" data-action="camera" title="Switch Between 5 Cinematic Cameras">
+                    🎥 CHASE CAM
+                </button>
+                <button class="action-btn" data-action="skin" title="Cycle Ball Material / Skins">
+                    🔮 SKIN <kbd>1-5</kbd>
+                </button>
+                <button class="action-btn" data-action="palette" title="Cycle LED Floor Color Schemes">
+                    🎨 PALETTE
+                </button>
+                <button class="action-btn" data-action="help" title="View All Controls & Hotkeys" style="padding: 10px 14px;">
+                    ❓ HELP
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Instructions / Help Modal -->
+    <div id="help-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🪩 CLUB CONTROLS & CRAZY EFFECTS</h2>
+                <button class="close-btn" data-action="help">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Welcome to <strong>NEON VELVET</strong>, an empty discotheque simulation equipped with real rolling ball physics, an interactive 16x16 LED dancefloor, moving light rigs, and wild visual effects.</p>
+                
+                <table class="shortcuts-table">
+                    <tr>
+                        <td><strong>Roll Ball</strong></td>
+                        <td><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> or <kbd>Arrow Keys</kbd> / Touch Drag</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Turbo Boost</strong></td>
+                        <td><kbd>Shift</kbd> (Nitro trail & dynamic camera warp)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Jump / Slam</strong></td>
+                        <td><kbd>Space</kbd> (Impact slam triggers dancefloor ripples!)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Strobe Storm</strong></td>
+                        <td><kbd>F</kbd> (Multi-frequency blinding strobe storm)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Laser Frenzy</strong></td>
+                        <td><kbd>L</kbd> (16 volumetric beams scanning smoke)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Zero-G Mode</strong></td>
+                        <td><kbd>G</kbd> (Float to the ceiling & disco ball!)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Acid Trip</strong></td>
+                        <td><kbd>C</kbd> (360° psychedelic rainbow hue cycling)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Disco Supernova</strong></td>
+                        <td><kbd>B</kbd> (Hyper-spin disco ball sparkle blaster)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Kaleido-Vision</strong></td>
+                        <td><kbd>K</kbd> (Hyperspace kaleidoscope warp)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Switch Camera</strong></td>
+                        <td><kbd>V</kbd> (Chase Cam, Ball POV, DJ Booth, Radar, Fly Cam)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ball Skins</strong></td>
+                        <td><kbd>1</kbd> - <kbd>5</kbd> (Mirror Disco, Chrome, Plasma, Vaporwave, Gold)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Next Music Track</strong></td>
+                        <td><kbd>T</kbd> or <kbd>P</kbd> (Procedural Disco / Techno synthesizer)</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Scripts -->
+    <script src="js/synth.js"></script>
+    <script src="js/discoScene.js"></script>
+    <script src="js/ballPhysics.js"></script>
+    <script src="js/effectsManager.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
